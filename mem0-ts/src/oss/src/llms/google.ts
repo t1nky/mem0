@@ -1,20 +1,24 @@
-import { GoogleGenAI } from "@google/genai";
+import { GenerateContentParameters, GoogleGenAI } from "@google/genai";
 import { LLM, LLMResponse } from "./base";
 import { LLMConfig, Message } from "../types";
 
 export class GoogleLLM implements LLM {
   private google: GoogleGenAI;
   private model: string;
+  private providerConfig: GenerateContentParameters["config"];
 
   constructor(config: LLMConfig) {
     this.google = new GoogleGenAI({ apiKey: config.apiKey });
     this.model = config.model || "gemini-2.0-flash";
+    this.providerConfig = config.config?.providerConfig || {
+      thinkingConfig: { thinkingBudget: 0 },
+    };
   }
 
   async generateResponse(
     messages: Message[],
     responseFormat?: { type: string },
-    tools?: any[],
+    tools?: any[]
   ): Promise<string | LLMResponse> {
     const completion = await this.google.models.generateContent({
       contents: messages.map((msg) => ({
@@ -28,11 +32,8 @@ export class GoogleLLM implements LLM {
         ],
         role: msg.role === "system" ? "model" : "user",
       })),
-
+      config: this.providerConfig,
       model: this.model,
-      // config: {
-      //   responseSchema: {}, // Add response schema if needed
-      // },
     });
 
     const text = completion.text
