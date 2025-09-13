@@ -80,7 +80,7 @@ export class Qdrant implements VectorStore {
         "lte" in value
       ) {
         conditions.push({
-          key,
+          key: `payload.${key}`,
           range: {
             gte: value.gte,
             lte: value.lte,
@@ -88,7 +88,7 @@ export class Qdrant implements VectorStore {
         });
       } else {
         conditions.push({
-          key,
+          key: `payload.${key}`,
           match: {
             value,
           },
@@ -125,12 +125,13 @@ export class Qdrant implements VectorStore {
       vector: query,
       filter: queryFilter,
       limit,
+      with_payload: true,
     });
 
     return results.map((hit) => ({
       id: String(hit.id),
       payload: (hit.payload as Record<string, any>) || {},
-      score: hit.score,
+      score: hit.score || 0,
     }));
   }
 
