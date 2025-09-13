@@ -1,4 +1,4 @@
-import { QdrantClient } from "@qdrant/js-client-rest";
+import { QdrantClient, Schemas } from "@qdrant/js-client-rest";
 import { VectorStore } from "./base";
 import { SearchFilters, VectorStoreConfig, VectorStoreResult } from "../types";
 import * as fs from "fs";
@@ -14,18 +14,6 @@ interface QdrantConfig extends VectorStoreConfig {
   collectionName: string;
   embeddingModelDims: number;
   dimension?: number;
-}
-
-interface QdrantFilter {
-  must?: QdrantCondition[];
-  must_not?: QdrantCondition[];
-  should?: QdrantCondition[];
-}
-
-interface QdrantCondition {
-  key: string;
-  match?: { value: any };
-  range?: { gte?: number; gt?: number; lte?: number; lt?: number };
 }
 
 export class Qdrant implements VectorStore {
@@ -68,35 +56,38 @@ export class Qdrant implements VectorStore {
     this.initialize().catch(console.error);
   }
 
-  private createFilter(filters?: SearchFilters): QdrantFilter | undefined {
-    if (!filters) return undefined;
+  private createFilter(
+    filters?: SearchFilters,
+  ): Schemas["SearchRequest"]["filter"] | undefined {
+    if (!filters || Object.keys(filters).length === 0) {
+      return undefined;
+    }
 
-    const conditions: QdrantCondition[] = [];
+    const must: Schemas["Filter"]["must"] = [];
+
     for (const [key, value] of Object.entries(filters)) {
       if (
         typeof value === "object" &&
         value !== null &&
-        "gte" in value &&
-        "lte" in value
+        ("gte" in value || "gt" in value || "lte" in value || "lt" in value)
       ) {
-        conditions.push({
-          key: `payload.${key}`,
-          range: {
-            gte: value.gte,
-            lte: value.lte,
-          },
-        });
+        const range: Schemas["Range"] = value;
+        const fieldCondition: Schemas["FieldCondition"] = {
+          key: key,
+          range: range,
+        };
+        must.push(fieldCondition);
       } else {
-        conditions.push({
-          key: `payload.${key}`,
-          match: {
-            value,
-          },
-        });
+        const match: Schemas["MatchValue"] = { value: value };
+        const fieldCondition: Schemas["FieldCondition"] = {
+          key: key,
+          match: match,
+        };
+        must.push(fieldCondition);
       }
     }
 
-    return conditions.length ? { must: conditions } : undefined;
+    return { must };
   }
 
   async insert(
