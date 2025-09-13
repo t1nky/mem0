@@ -1,6 +1,6 @@
 {
   "name": "@t1nky/mem0-ts",
-  "version": "2.1.46",
+  "version": "2.1.47",
   "description": "The Memory Layer For Your AI Apps",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
