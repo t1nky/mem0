@@ -2,9 +2,9 @@ import dotenv from "dotenv";
 import { demoMemoryStore } from "./memory";
 import { demoSupabase } from "./supabase";
 import { demoAzureAISearch } from "./azure-ai-search";
+import { demoPGVector } from "./pgvector";
 // import { demoQdrant } from "./qdrant";
 // import { demoRedis } from "./redis";
-// import { demoPGVector } from "./pgvector";
 
 // Load environment variables
 dotenv.config();
@@ -17,10 +17,10 @@ async function main() {
     // memory: demoMemoryStore,
     supabase: demoSupabase,
     "azure-ai-search": demoAzureAISearch,
+    pgvector: demoPGVector,
     // Uncomment these as they are implemented
     // qdrant: demoQdrant,
     // redis: demoRedis,
-    // pgvector: demoPGVector,
   };
 
   if (selectedStore) {
