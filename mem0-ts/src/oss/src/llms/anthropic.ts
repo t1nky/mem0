@@ -17,7 +17,7 @@ export class AnthropicLLM implements LLM {
 
   async generateResponse(
     messages: Message[],
-    responseFormat?: { type: string }
+    responseFormat?: { type: string },
   ): Promise<string> {
     // Extract system message if present
     const systemMessage = messages.find((msg) => msg.role === "system");
