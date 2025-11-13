@@ -1,7 +1,5 @@
 ---
 title: Overview
-icon: "info"
-iconType: "solid"
 ---
 
 Mem0 includes built-in support for various popular databases. Memory can utilize the database provided by the user, ensuring efficient use for specific needs.
@@ -11,19 +9,20 @@ Mem0 includes built-in support for various popular databases. Memory can utilize
 See the list of supported vector databases below.
 
 <Note>
-  The following vector databases are supported in the Python implementation. The TypeScript implementation currently only supports Qdrant, Redis,Vectorize and in-memory vector database.
+  The following vector databases are supported in the Python implementation. The TypeScript implementation currently only supports Qdrant, Redis, Valkey, Vectorize and in-memory vector database.
 </Note>
 
 <CardGroup cols={3}>
   <Card title="Qdrant" href="/components/vectordbs/dbs/qdrant"></Card>
   <Card title="Chroma" href="/components/vectordbs/dbs/chroma"></Card>
-  <Card title="Pgvector" href="/components/vectordbs/dbs/pgvector"></Card>
+  <Card title="PGVector" href="/components/vectordbs/dbs/pgvector"></Card>
   <Card title="Upstash Vector" href="/components/vectordbs/dbs/upstash-vector"></Card>
   <Card title="Milvus" href="/components/vectordbs/dbs/milvus"></Card>
   <Card title="Pinecone" href="/components/vectordbs/dbs/pinecone"></Card>
   <Card title="MongoDB" href="/components/vectordbs/dbs/mongodb"></Card>
   <Card title="Azure" href="/components/vectordbs/dbs/azure"></Card>
   <Card title="Redis" href="/components/vectordbs/dbs/redis"></Card>
+  <Card title="Valkey" href="/components/vectordbs/dbs/valkey"></Card>
   <Card title="Elasticsearch" href="/components/vectordbs/dbs/elasticsearch"></Card>
   <Card title="OpenSearch" href="/components/vectordbs/dbs/opensearch"></Card>
   <Card title="Supabase" href="/components/vectordbs/dbs/supabase"></Card>
@@ -43,12 +42,10 @@ For a comprehensive list of available parameters for vector database configurati
 
 ## Common issues
 
-### Using model with different dimensions
+### Using Model with Different Dimensions
 
-If you are using customized model, which is having different dimensions other than 1536
-for example 768, you may encounter below error:
+If you are using a customized model with different dimensions other than 1536 (for example, 768), you may encounter the following error:
 
 `ValueError: shapes (0,1536) and (768,) not aligned: 1536 (dim 1) != 768 (dim 0)`
 
-you could add `"embedding_model_dims": 768,` to the config of the vector_store to overcome this issue.
-
+You can add `"embedding_model_dims": 768,` to the config of the vector_store to resolve this issue.

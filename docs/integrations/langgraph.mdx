@@ -67,7 +67,7 @@ def chatbot(state: State):
 
     try:
         # Retrieve relevant memories
-        memories = mem0.search(messages[-1].content, user_id=user_id, output_format='v1.1')
+        memories = mem0.search(messages[-1].content, user_id=user_id)
         
         # Handle dict response format
         memory_list = memories['results']
@@ -94,7 +94,7 @@ def chatbot(state: State):
                     "content": response.content
                 }
             ]
-            result = mem0.add(interaction, user_id=user_id, output_format='v1.1')
+            result = mem0.add(interaction, user_id=user_id)
             print(f"Memory saved: {len(result.get('results', []))} memories added")
         except Exception as e:
             print(f"Error saving memory: {e}")
@@ -163,10 +163,12 @@ if __name__ == "__main__":
 
 By integrating LangGraph with Mem0, you can build a personalized Customer Support AI Agent that can maintain context across interactions and provide personalized assistance.
 
-## Help
+<CardGroup cols={2}>
+  <Card title="LangChain Integration" icon="link" href="/integrations/langchain">
+    Build conversational agents with LangChain and Mem0
+  </Card>
+  <Card title="CrewAI Integration" icon="users" href="/integrations/crewai">
+    Create multi-agent systems with CrewAI
+  </Card>
+</CardGroup>
 
-- For more details on LangGraph, visit the [LangChain documentation](https://python.langchain.com/docs/langgraph).
-- [Mem0 Platform](https://app.mem0.ai/).
-- If you need further assistance, please feel free to reach out to us through following methods:
-
-<Snippet file="get-help.mdx" />

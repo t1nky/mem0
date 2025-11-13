@@ -17,7 +17,7 @@ export class AnthropicLLM implements LLM {
 
   async generateResponse(
     messages: Message[],
-    responseFormat?: { type: string },
+    responseFormat?: { type: string }
   ): Promise<string> {
     // Extract system message if present
     const systemMessage = messages.find((msg) => msg.role === "system");
@@ -42,8 +42,9 @@ export class AnthropicLLM implements LLM {
     const firstBlock = response.content[0];
     if (firstBlock.type === "text") {
       return firstBlock.text;
+    } else {
+      throw new Error("Unexpected response type from Anthropic API");
     }
-    return "";
   }
 
   async generateChat(messages: Message[]): Promise<LLMResponse> {
